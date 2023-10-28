@@ -1,11 +1,12 @@
 // Included libraries
-#include <iostream>
-using namespace std;
+#include <list>
+#include <string>
 // Header files
 #include "hdrs/arg_validate.h"
+#include "hdrs/utils.h"
 
 
-filesystem validatePayloadFile(const char *arg_file_path) {
+filesys::path validatePayloadFile(const char *arg_file_path) {
     /* Purpose - Confirms that the passed in string reference to file actually exists on disk.
      * Parameters:
      *      @ arg_file_path - The passed in string file path to the file on disk to be validated.
@@ -13,10 +14,10 @@ filesystem validatePayloadFile(const char *arg_file_path) {
      * Returns - The validated file path on success, and a empty file path on failure.
      */
     // Set the file path based on the passed in string //
-    filesystem file_path = arg_file_path;
+    filesys::path file_path = arg_file_path;
 
     // If the file path does not exist //
-    if (!filesystem::exists(file_path)) {
+    if (!filesys::exists(file_path)) {
         // Print error return empty string //
         printErr("Passed in file path does not exist .. check usage and try again");
         // Set the filesystem path to empty string //
@@ -37,11 +38,11 @@ int validateObfuscationMode(const char *arg_obfuscation_mode) {
     // Set temporary buffer for storing converted obfuscation mode //
     int temp_mode = 0;
     // Declare a list of int modes to compare after arg is converted //
-    const list<int> mode_list = {MIN_MODE, 2, MAX_MODE};
+    const std::list<int> mode_list = {MIN_MODE, 2, MAX_MODE};
 
     try {
         // Convert the parsed obfuscation mode to integer //
-        const int operation_mode = stoi(arg_obfuscation_mode);
+        const int operation_mode = std::stoi(arg_obfuscation_mode);
         // Iterate through the list of specified modes //
         for (int mode : mode_list) {
             // If the current iteration mode is equal to the passed in arg //
@@ -53,7 +54,7 @@ int validateObfuscationMode(const char *arg_obfuscation_mode) {
         }
     }
     // If error occurs converting the obfuscation mode arg to integer //
-    catch (const exception &conversion_err) {
+    catch (const std::exception& conversion_err) {
         // Print conversion error and return error code //
         printErr(conversion_err.what());
         return -1;

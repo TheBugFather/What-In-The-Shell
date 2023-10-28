@@ -1,7 +1,7 @@
 // Included libraries //
+#include <filesystem>
 #include <iostream>
-#include <stdio>
-using namespace std;
+#include <cstdio>
 // Header files //
 #include "hdrs/arg_validate.h"
 #include "hdrs/utils.h"
@@ -32,7 +32,7 @@ int usageDisplay(char *program_name) {
 void bannerDisplay() {
     /* Purpose - Displays the program banner and author.
      */
-    cout << R"(
+    std::cout << R"(
      _                                     ___                                               -_
     - - /, /, ,,            ,  _-_,       -   ---___- ,,            -_-/  ,,          ,, ,, / \\
       )/ )/ ) ||      _    ||    //          (' ||    ||           (_ /   ||          || || ` ||
@@ -41,7 +41,7 @@ void bannerDisplay() {
       )  )  ) || || (( ||  ||    || || ||   (( //     || || ||/    _/  )) || || ||/   || ||
      /-_/-_/  \\ |/  \/\\  \\, _-_, \\ \\     -____-  \\ |/ \\,/  (_-_-   \\ |/ \\,/  \\ \\  <>
                 _/                                      _/                  _/
-    )" << "\t\t\t\t\t\t\t\t[+] Author => TheBugFather\n"
+    )" << "\t\t\t\t\t\t\t\t[+] Author => TheBugFather" << std::endl;
 }
 
 
@@ -61,14 +61,14 @@ int main(int argc, char *argv[]) {
         return usageDisplay(argv[0]);
     }
     // Validate the payload file arg //
-    const filesystem payload_file = validatePayloadFile(argv[1]);
+    const filesys::path payload_file = validatePayloadFile(argv[1]);
     // Validate the obfuscation mode arg //
     const int obfuscation_mode = validateObfuscationMode(argv[2]);
 
     // If either parameter validation functions failed //
-    if (payload_file.path.empty() || (obfuscation_mode < MIN_MODE || obfuscation_mode > MAX_MODE)) {
+    if (payload_file.empty() || (obfuscation_mode < MIN_MODE || obfuscation_mode > MAX_MODE)) {
         // Display program usage & exit with error code //
-        return usageDisplay(argv[0])
+        return usageDisplay(argv[0]);
     }
     return 0;
 }

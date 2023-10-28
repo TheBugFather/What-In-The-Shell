@@ -2,6 +2,6 @@
 #define UTILS_H
 
 // Function declarations //
-void printErr(const string& err_message);
+void printErr(const std::string& err_message);
 
 #endif

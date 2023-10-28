@@ -3,42 +3,31 @@ CXX=g++
 CXXFLAGS=-g -Wall
 # Set the linker flags
 LD_FLAGS=
-
-# If the OS is Windows
-ifeq ($(OS),Windows_NT)
-	# Convert path separators for Windows
- 	WIN_PATH=$(subst /,\,$1)
-# If the OS is non-Windows
-else
-	# Retain the non-Windows forward slash format
-	WIN_PATH=$1
-endif
-
 # Configure project directories (src & hdrs manually created)
 SRC_DIR=src
-HDR_DIR=src/hdrs
+HDR_DIR=src\hdrs
 OBJ_DIR=obj
 BIN_DIR=bin
-# Configure project files in associated directories
-SRC_FILES=$(wildcard $(call WIN_PATH,$(SRC_DIR)/*.cpp))
-HDR_FILES=$(wildcard $(call WIN_PATH,$(HDR_DIR)/*.h))
-OBJ_FILES=$(patsubst $(call WIN_PATH,$(SRC_DIR)/*.cpp),$(OBJ_DIR)/%.o,$(SRC_FILES))
-EXE_FILE=$(BIN_DIR)/WhatInTheShell?.exe
+# Configure project files in associated directories utilizing macro function if Windows
+SRC_FILES=$(wildcard $(SRC_DIR)\*.cpp)
+HDR_FILES=$(wildcard $(HDR_DIR)\*.h)
+OBJ_FILES=$(OBJ_DIR)\arg_validate.o $(OBJ_DIR)\utils.o $(OBJ_DIR)\what_in_the_shell.o
+EXE_FILE=$(BIN_DIR)\WhatInTheShell.exe
 
 # Executable recipe
 $(EXE_FILE): $(OBJ_DIR) $(BIN_DIR) $(OBJ_FILES)
 	$(CXX) $(CXXFLAGS) $(OBJ_FILES) $(LD_FLAGS) -o $@
 
-# Pattern rule for building object files
-$(OBJ_FILES): $(SRC_FILES) $(HDR_FILES)
+# Object files recipe
+$(OBJ_DIR)\\%.o: $(SRC_DIR)\%.cpp $(HDR_FILES)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Ensures dir creation of obj & bin folders
 $(OBJ_DIR):
-	mkdir -p $@
+	mkdir $@
 
 $(BIN_DIR):
-	mkdir -p $@
+	mkdir $@
 
 # Used to clean up old bins & object files before compilation
 clean:

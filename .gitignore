@@ -1,2 +1,6 @@
 # Clion env
 .idea
+# Object files
+obj
+# Binaries
+bin
