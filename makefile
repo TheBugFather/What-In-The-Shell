@@ -9,7 +9,6 @@ HDR_DIR=src\hdrs
 OBJ_DIR=obj
 BIN_DIR=bin
 # Configure project files in associated directories utilizing macro function if Windows
-SRC_FILES=$(wildcard $(SRC_DIR)\*.cpp)
 HDR_FILES=$(wildcard $(HDR_DIR)\*.h)
 OBJ_FILES=$(OBJ_DIR)\arg_validate.o $(OBJ_DIR)\utils.o $(OBJ_DIR)\what_in_the_shell.o
 EXE_FILE=$(BIN_DIR)\WhatInTheShell.exe
@@ -31,7 +30,7 @@ $(BIN_DIR):
 
 # Used to clean up old bins & object files before compilation
 clean:
-	$(RM) -r $(BIN_DIR)/* $(OBJ_DIR)/*
+	$(RM) /S $(BIN_DIR)/* $(OBJ_DIR)/*
 
 # Needed for Clion IDE
 all: $(EXE_FILE)
