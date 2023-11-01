@@ -3,8 +3,6 @@
 // Header files //
 #include "hdrs/arg_validate.h"
 #include "hdrs/utils.h"
-// Define namespace aliases //
-namespace filesys = ns_filesystem;
 
 
 filesys::path validatePayloadFile(const char* arg_file_path) {
@@ -45,7 +43,7 @@ int validateObfuscationMode(const char* arg_obfuscation_mode) {
         // Convert the parsed obfuscation mode to integer //
         const int operation_mode = std::stoi(arg_obfuscation_mode);
         // Iterate through the list of specified modes //
-        for (int mode : mode_list) {
+        for (const int mode : mode_list) {
             // If the current iteration mode is equal to the passed in arg //
             if (mode == operation_mode) {
                 // Set the temp buffer value to the current iteration //
@@ -54,8 +52,8 @@ int validateObfuscationMode(const char* arg_obfuscation_mode) {
             }
         }
     }
-    // If error occurs converting the obfuscation mode arg to integer //
-    catch (const std::exception& conversion_err) {
+    // If the char string to in int conversion fails due to out of range data type //
+    catch (const std::out_of_range& conversion_err) {
         // Print conversion error and return error code //
         printErr(conversion_err.what());
         return -1;

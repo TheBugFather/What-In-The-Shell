@@ -1,13 +1,13 @@
+// Included libraries //
+#include <iostream>
 // Header files //
 #include "hdrs/arg_validate.h"
 #include "hdrs/io_operations.h"
 #include "hdrs/utils.h"
 #include "hdrs/what_in_the_shell.h"
 // Local Macros //
-#define MAX_ARGS 3
 #define LINE_COUNT 90
-// Define namespace aliases //
-namespace filesys = ns_filesystem;
+#define MAX_ARGS 3
 
 
 int usageDisplay(std::string* program_name) {
@@ -83,13 +83,50 @@ int main(int argc, char *argv[]) {
         // Display program usage & exit with error code //
         return usageDisplay(&exe_name);
     }
-
-    // Initialize the shellcode struct //
-    struct ShellcodeStruct shell_struct = { 0 };
+    // Initialize the shellcode struct populated with null bytes //
+    struct ShellcodeStruct ShellStruct = { 0 };
 
     // If the data fails to be read from the binary into shellcode struct //
-    if (!readBinFile(payload_file, shell_struct)) {
+    if (!readBinFile(payload_file, ShellStruct) || ShellStruct.bytes_read == 0
+    || ShellStruct.src_shellcode_ptr == nullptr) {
+        // Print error and return error code //
+        printErr("Either binary file read operation failed, no bytes were read, or there is no"
+                 "loaded shellcode in memory buffer.");
         return -2;
+    }
+    std::cout << "[+] The size of the shellcode read from " << payload_file
+              << ":" << ShellStruct.bytes_read << std::endl;
+
+    // Check the obfuscation mode to execute the proper obfuscation function //
+    switch (obfuscation_mode) {
+        case MODE_MAC:
+            // If shellcode is not a multiple of 6 //
+            if (!ShellStruct.bytes_read % 6 == 0) {
+                break;
+            }
+
+            break;
+
+        case MODE_IPV4:
+            // If shellcode is not a multiple of 4 //
+            if (!ShellStruct.bytes_read % 4 == 0) {
+                break;
+            }
+
+            break;
+
+        case MODE_IPV6:
+            // If shellcode is not a multiple of 16 //
+            if (!ShellStruct.bytes_read % 16 == 0) {
+                break;
+            }
+
+            break;
+
+        default:
+            // Print error and return error code //
+            printErr("Error occurred checking obfuscation mode, this logic should not happen");
+            return -3;
     }
 
     return 0;

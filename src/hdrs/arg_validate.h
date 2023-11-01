@@ -7,7 +7,7 @@
 #define MAX_MODE 3
 
 // Function declarations //
-ns_filesystem::path validatePayloadFile(const char* arg_file_path);
+filesys::path validatePayloadFile(const char* arg_file_path);
 int validateObfuscationMode(const char* arg_obfuscation_mode);
 
 #endif
