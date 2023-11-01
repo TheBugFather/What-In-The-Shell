@@ -10,7 +10,8 @@ OBJ_DIR=obj
 BIN_DIR=bin
 # Configure project files in associated directories utilizing macro function if Windows
 HDR_FILES=$(wildcard $(HDR_DIR)\*.h)
-OBJ_FILES=$(OBJ_DIR)\arg_validate.o $(OBJ_DIR)\utils.o $(OBJ_DIR)\what_in_the_shell.o
+OBJ_FILES=$(OBJ_DIR)\arg_validate.o $(OBJ_DIR)\io_operations.o \
+	      $(OBJ_DIR)\utils.o $(OBJ_DIR)\what_in_the_shell.o
 EXE_FILE=$(BIN_DIR)\WhatInTheShell.exe
 
 # Executable recipe
@@ -30,7 +31,7 @@ $(BIN_DIR):
 
 # Used to clean up old bins & object files before compilation
 clean:
-	$(RM) /S $(BIN_DIR)/* $(OBJ_DIR)/*
+	DEL /Q /S $(BIN_DIR)\* $(OBJ_DIR)\*
 
 # Needed for Clion IDE
 all: $(EXE_FILE)

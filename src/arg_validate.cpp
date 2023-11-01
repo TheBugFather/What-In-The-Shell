@@ -1,12 +1,13 @@
-// Included libraries
+// Included libraries //
 #include <list>
-#include <string>
-// Header files
+// Header files //
 #include "hdrs/arg_validate.h"
 #include "hdrs/utils.h"
+// Define namespace aliases //
+namespace filesys = ns_filesystem;
 
 
-filesys::path validatePayloadFile(const char *arg_file_path) {
+filesys::path validatePayloadFile(const char* arg_file_path) {
     /* Purpose - Confirms that the passed in string reference to file actually exists on disk.
      * Parameters:
      *      @ arg_file_path - The passed in string file path to the file on disk to be validated.
@@ -27,7 +28,7 @@ filesys::path validatePayloadFile(const char *arg_file_path) {
 }
 
 
-int validateObfuscationMode(const char *arg_obfuscation_mode) {
+int validateObfuscationMode(const char* arg_obfuscation_mode) {
     /* Purpose -  Confirms that the passed in obfuscation mode is one of the available options.
      * Parameters:
      *      @ arg_obfuscation_mode - The passed in obfuscation mode to be validated.
