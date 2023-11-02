@@ -52,3 +52,6 @@ bool readBinFile(const filesys::path arg_file, ShellcodeStruct &shell_struct) {
     }
     return true;
 }
+
+
+// bool writeSourceFile();

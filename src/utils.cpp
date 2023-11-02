@@ -4,6 +4,15 @@
 #include "hdrs/utils.h"
 
 
+void nopPadding(ShellcodeStruct &shell_struct, const unsigned int nop_count) {
+    /* Purpose -
+     * Parameters:
+     * Returns -
+     */
+    pass;
+}
+
+
 void printErr(const std::string& err_message) {
     /* Purpose -  Displays the error message via stderr.
      * Parameters:

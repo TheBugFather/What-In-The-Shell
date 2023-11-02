@@ -58,6 +58,5 @@ int validateObfuscationMode(const char* arg_obfuscation_mode) {
         printErr(conversion_err.what());
         return -1;
     }
-
     return temp_mode;
 }

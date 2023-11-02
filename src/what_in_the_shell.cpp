@@ -20,12 +20,11 @@ int usageDisplay(std::string* program_name) {
     // Initialize border line variables //
     const char equals = '=';
     const char plus = '+';
-    const unsigned int count = LINE_COUNT;
     // Format border line //
-    std::string equal_line(count, equals);
+    std::string equal_line(LINE_COUNT, equals);
     std::string full_line = plus + equal_line + plus;
 
-    // Print usage with borderss //
+    // Print usage with borders //
     std::cout << full_line << "\n"
               << "\t\t[!] Usage: " << *program_name << " <payload_file> <obfuscation_mode>" << "\n"
               << "\t\t[+] Payload obfuscation modes:\n"
@@ -95,29 +94,38 @@ int main(int argc, char *argv[]) {
         return -2;
     }
     std::cout << "[+] The size of the shellcode read from " << payload_file
-              << ":" << ShellStruct.bytes_read << std::endl;
+              << ": " << ShellStruct.bytes_read << std::endl;
 
     // Check the obfuscation mode to execute the proper obfuscation function //
     switch (obfuscation_mode) {
         case MODE_MAC:
-            // If shellcode is not a multiple of 6 //
+            // If shellcode is not divisible by 6 //
             if (!ShellStruct.bytes_read % 6 == 0) {
+                std::cout << "[+] The shellcode is not divisible by 6 based on MAC address" << std::endl;
+                // Append NOP slides on the end of the shellcode for proper padding //
+                nopPadding(ShellStruct, 6);
                 break;
             }
 
             break;
 
         case MODE_IPV4:
-            // If shellcode is not a multiple of 4 //
+            // If shellcode is not divisible by 4 //
             if (!ShellStruct.bytes_read % 4 == 0) {
+                std::cout << "[+] The shellcode is not divisible by 4 based on IPv4 address" << std::endl;
+                // Append NOP slides on the end of the shellcode for proper padding //
+                nopPadding(ShellStruct, 4);
                 break;
             }
 
             break;
 
         case MODE_IPV6:
-            // If shellcode is not a multiple of 16 //
+            // If shellcode is not divisible by 16 //
             if (!ShellStruct.bytes_read % 16 == 0) {
+                std::cout << "[+] The shellcode is not divisible by 16 based on IPv6 address" << std::endl;
+                // Append NOP slides on the end of the shellcode for proper padding //
+                nopPadding(ShellStruct, 16);
                 break;
             }
 
