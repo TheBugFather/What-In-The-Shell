@@ -4,7 +4,8 @@
 #include "hdrs/what_in_the_shell.h"
 
 // Function declarations //
-void nopPadding(ShellcodeStruct &shell_struct, unsigned int nop_count);
+void nopPaddingCopy(ShellcodeStruct &shell_struct, const unsigned int nop_count);
 void printErr(const std::string& err_message);
+void shellCopy(const ShellcodeStruct &shell_struct);
 
 #endif

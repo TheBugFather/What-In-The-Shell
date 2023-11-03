@@ -4,10 +4,9 @@
 #include "hdrs/utils.h"
 
 
-void nopPadding(ShellcodeStruct &shell_struct, const unsigned int nop_count) {
+void nopPaddingCopy(ShellcodeStruct &shell_struct, const unsigned int nop_count) {
     /* Purpose -
      * Parameters:
-     * Returns -
      */
     pass;
 }
@@ -19,4 +18,12 @@ void printErr(const std::string& err_message) {
      *      @ err_message - A pointer to the string message to be displayed.
      */
     std::cerr << "\n* [ERROR] " << err_message << " *" << std::endl;
+}
+
+
+void shellCopy(const ShellcodeStruct &shell_struct) {
+    /* Purpose -
+     * Parameters:
+     */
+    pass;
 }

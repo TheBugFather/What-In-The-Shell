@@ -99,36 +99,48 @@ int main(int argc, char *argv[]) {
     // Check the obfuscation mode to execute the proper obfuscation function //
     switch (obfuscation_mode) {
         case MODE_MAC:
-            // If shellcode is not divisible by 6 //
+            // If shellcode is not divisible by 6 (needs NOP padding) //
             if (!ShellStruct.bytes_read % 6 == 0) {
-                std::cout << "[+] The shellcode is not divisible by 6 based on MAC address" << std::endl;
-                // Append NOP slides on the end of the shellcode for proper padding //
-                nopPadding(ShellStruct, 6);
-                break;
+                std::cout << "[+] The shellcode is not divisible by 6 based on MAC address"
+                             " .. padding NOP slides" << std::endl;
+                // Allocate shellcode malloc buffer with appended NOP slide padding //
+                nopPaddingCopy(ShellStruct, 6);
             }
-
+            // If the shellcode is divisible by 6 (no padding needed) //
+            else {
+                // Allocate shellcode malloc buffer //
+                shellCopy(ShellStruct);
+            }
             break;
 
         case MODE_IPV4:
-            // If shellcode is not divisible by 4 //
+            // If shellcode is not divisible by 4 (needs NOP padding) //
             if (!ShellStruct.bytes_read % 4 == 0) {
-                std::cout << "[+] The shellcode is not divisible by 4 based on IPv4 address" << std::endl;
-                // Append NOP slides on the end of the shellcode for proper padding //
-                nopPadding(ShellStruct, 4);
-                break;
+                std::cout << "[+] The shellcode is not divisible by 4 based on IPv4 address"
+                             " .. padding NOP slides" << std::endl;
+                // Allocate shellcode malloc buffer with appended NOP slide padding //
+                nopPaddingCopy(ShellStruct, 4);
             }
-
+            // If the shellcode is divisible by 4 (no padding needed) //
+            else {
+                // Allocate shellcode malloc buffer //
+                shellCopy(ShellStruct);
+            }
             break;
 
         case MODE_IPV6:
-            // If shellcode is not divisible by 16 //
+            // If shellcode is not divisible by 16 (needs NOP padding) //
             if (!ShellStruct.bytes_read % 16 == 0) {
-                std::cout << "[+] The shellcode is not divisible by 16 based on IPv6 address" << std::endl;
-                // Append NOP slides on the end of the shellcode for proper padding //
-                nopPadding(ShellStruct, 16);
-                break;
+                std::cout << "[+] The shellcode is not divisible by 16 based on IPv6 address"
+                             " .. passing NOP slides" << std::endl;
+                // Allocate shellcode malloc buffer with appended NOP slide padding //
+                nopPaddingCopy(ShellStruct, 16);
             }
-
+            // If the shellcode is divisible by 16 (no padding needed) //
+            else {
+                // Allocate shellcode malloc buffer //
+                shellCopy(ShellStruct);
+            }
             break;
 
         default:
@@ -136,6 +148,11 @@ int main(int argc, char *argv[]) {
             printErr("Error occurred checking obfuscation mode, this logic should not happen");
             return -3;
     }
+
+    // TODO: allocate malloc buffer for transferring shellcode as unsigned char type
+
+    // TODO: do another case statement like above for generating the obfuscated payload array
+    //      in its generated decryptor source code
 
     return 0;
 }

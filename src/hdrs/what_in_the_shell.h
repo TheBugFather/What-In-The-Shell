@@ -12,7 +12,7 @@ typedef struct ShellcodeStruct {
     void* src_shellcode_ptr;    // Pointer to the original shellcode
     void* dst_shellcode_ptr;    // Pointer to the obfuscated shellcode
     unsigned int result_size;   // Number of obfuscated bytes generated from source
-    std::string output_file;    // Name of source code exploit that is generated
+    char output_file[32];    // Name of source code exploit that is generated
 } ShellcodeStruct;
 // Pointer alias data type for ShellcodeStruct //
 typedef ShellcodeStruct* pShellcodeStruct;

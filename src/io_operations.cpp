@@ -8,9 +8,13 @@
 
 
 bool readBinFile(const filesys::path arg_file, ShellcodeStruct &shell_struct) {
-    /* Purpose -
+    /* Purpose -  Reads shellcode from source file to store ShellcodeStruct until obfuscation
+     *            mutation is generated.
      * Parameters:
-     * Returns -
+     *      @ arg_file - The file path to the file where the binary shellcode data will be read.
+     *      @ shell_struct - Reference to the shellcode struct.
+     *
+     * Returns - true/false on success/failure.
      */
     try {
         // If the file does not exist or is not a regular file //
