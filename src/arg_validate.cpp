@@ -1,5 +1,5 @@
 // Included libraries //
-#include <list>
+#include <vector>
 // Header files //
 #include "hdrs/arg_validate.h"
 #include "hdrs/utils.h"
@@ -37,7 +37,7 @@ int validateObfuscationMode(const char* arg_obfuscation_mode) {
     // Set temporary buffer for storing converted obfuscation mode //
     int temp_mode = 0;
     // Declare a list of int modes to compare after arg is converted //
-    const std::list<int> mode_list = {MIN_MODE, 2, MAX_MODE};
+    const std::vector<int> mode_list = {MIN_MODE, 2, MAX_MODE};
 
     try {
         // Convert the parsed obfuscation mode to integer //
