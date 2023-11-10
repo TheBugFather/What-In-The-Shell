@@ -1,4 +1,5 @@
 // Included libraries //
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -12,7 +13,7 @@ void openSourceFile(ShellcodeStruct& shell_struct) {
      * Parameters:
      */
     // Open the file in binary mode for reading and writing //
-    std::ofstream file_stream(shell_struct.output_file, std::ios::binary);
+    std::ofstream file_stream(shell_struct.output_file);
     // Ensure the file stream was properly opened //
     if (!file_stream.is_open()) {
         // Format error message, display it, and exit with error code //
@@ -77,4 +78,18 @@ bool readBinFile(const filesys::path& arg_file, ShellcodeStruct& shell_struct) {
 }
 
 
-// bool writeSourceFile();
+void writeOutputData(ShellcodeStruct& shell_struct, const char* data) {
+    /* Purpose -
+     * Parameters:
+     * Returns -
+     */
+    // Attempt to write data to output file stream //
+    shell_struct.output_stream.write(data, static_cast<std::streamsize>(strlen(data)));
+    // If the write operation was not successful //
+    if (!shell_struct.output_stream) {
+        // Format error message and display it //
+        std::string err_message = "Error occurred writing " + std::to_string(*data) +
+                                  " to output file " + shell_struct.output_file.string();
+        printErr(err_message);
+    }
+}

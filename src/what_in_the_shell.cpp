@@ -2,6 +2,9 @@
 #include <iostream>
 // Header files //
 #include "hdrs/arg_validate.h"
+#include "hdrs/ipv4_obfuscation.h"
+#include "hdrs/ipv6_obfuscation.h"
+#include "hdrs/mac_obfuscation.h"
 #include "hdrs/utils.h"
 #include "hdrs/what_in_the_shell.h"
 // Local Macros //

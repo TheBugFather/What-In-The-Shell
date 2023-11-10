@@ -12,5 +12,6 @@ namespace filesys = std::filesystem;
 // Function prototypes //
 void openSourceFile(ShellcodeStruct& shell_struct);
 bool readBinFile(const filesys::path& arg_file, ShellcodeStruct& shell_struct);
+void writeOutputData(ShellcodeStruct& shell_struct, const char* data);
 
 #endif

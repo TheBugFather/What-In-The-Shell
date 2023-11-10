@@ -1,7 +1,8 @@
 #ifndef WHAT_IN_THE_SHELL_H
 #define WHAT_IN_THE_SHELL_H
-// Header files //
+// Included libraries //
 #include <fstream>
+// Header files //
 #include "io_operations.h"
 // Preprocessor constants //
 #define MODE_MAC 1

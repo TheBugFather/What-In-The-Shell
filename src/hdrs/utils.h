@@ -1,7 +1,5 @@
 #ifndef UTILS_H
 #define UTILS_H
-// Included modules //
-#include <filesystem>
 // Forward declarations //
 struct ShellcodeStruct;
 // Header files //
