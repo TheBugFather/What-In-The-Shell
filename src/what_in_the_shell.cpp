@@ -52,11 +52,6 @@ void shellCopyHandler(ShellcodeStruct& shell_struct, const unsigned int divisibi
         regularCopy(shell_struct);
     }
 
-    // Allocate memory for the final obfuscated shellcode buffer //
-    shell_struct.out_shellcode_ptr = (unsigned char*)malloc(shell_struct.result_size);
-    // Copy the shellcode from padding process into buffer for obfuscation process //
-    memcpy(shell_struct.out_shellcode_ptr, shell_struct.pad_shellcode_ptr, shell_struct.result_size);
-
     // Establish the output file stream to write the resulting source code //
     openSourceFile(shell_struct);
 }
@@ -94,6 +89,7 @@ int usageDisplay(const filesys::path* program_name, const int exit_code) {
     /* Purpose - Displays the program usage due to improper args provided upon initial execution.
      * Parameters:
      *      @ program_name - The name of the binary currently being executed.
+     *      @ exit_code - The numerical code to be passed into the exit call.
      *
      * Returns - Erroneous exit code.
      */
@@ -137,13 +133,12 @@ void bannerDisplay() {
 int main(int argc, char* argv[]) {
     /* Purpose -
      * Parameters:
-     * Returns -
      */
     // Display the program banner //
     bannerDisplay();
     // Initialize the shellcode struct populated with NULL/empty types //
     struct ShellcodeStruct ShellStruct = {filesys::path(), filesys::path(), 0, 0, nullptr,
-                                          nullptr, nullptr, 0, filesys::path()};
+                                          nullptr, 0, filesys::path(), nullptr};
     // Get the name from the path arg as string //
     filenameExtract(argv[0], ShellStruct);
 
@@ -163,19 +158,19 @@ int main(int argc, char* argv[]) {
     // Execute logic based on selected obfuscation mode //
     switch (ShellStruct.obfuscation_mode) {
         case MODE_IPV4:
-            // Copy the read shellcode into malloc buffer, appending NOP slide if needed //
+            // Copy the read shellcode into malloc buffer, appending NOP slides if needed //
             shellCopyHandler(ShellStruct, 4);
             // Call the IPv4 based shellcode obfuscation handler //
             ipv4ObfuscationHandler(ShellStruct);
             break;
         case MODE_IPV6:
-            // Copy the read shellcode into malloc buffer, appending NOP slide if needed //
+            // Copy the read shellcode into malloc buffer, appending NOP slides if needed //
             shellCopyHandler(ShellStruct, 16);
             // Call the IPv6 based shellcode obfuscation handler //
             ipv6ObfuscationHandler(ShellStruct);
             break;
         case MODE_MAC:
-            // Copy the read shellcode into malloc buffer, appending NOP slide if needed //
+            // Copy the read shellcode into malloc buffer, appending NOP slides if needed //
             shellCopyHandler(ShellStruct, 6);
             // Call the MAC based shellcode obfuscation handler //
             macObfuscationHandler(ShellStruct);

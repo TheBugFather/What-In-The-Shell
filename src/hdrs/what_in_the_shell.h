@@ -18,10 +18,9 @@ typedef struct ShellcodeStruct {
     unsigned int bytes_read;           // Number of bytes read from passed in binary file
     unsigned char* in_shellcode_ptr;   // Pointer to the original shellcode
     unsigned char* pad_shellcode_ptr;  // Pointer to the shellcode after padding process
-    unsigned char* out_shellcode_ptr;  // Pointer to the shellcode for obfuscation process
     unsigned int result_size;          // Number of obfuscated bytes generated from source
     filesys::path output_file;         // Name of source code exploit that is generated
-    std::ofstream output_stream;
+    std::ofstream output_stream;       // Output file stream for writing generated code
 } ShellcodeStruct;
 
 #endif

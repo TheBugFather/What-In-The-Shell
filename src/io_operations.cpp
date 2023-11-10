@@ -8,9 +8,11 @@
 
 
 void openSourceFile(ShellcodeStruct& shell_struct) {
+    /* Purpose -
+     * Parameters:
+     */
     // Open the file in binary mode for reading and writing //
     std::ofstream file_stream(shell_struct.output_file, std::ios::binary);
-
     // Ensure the file stream was properly opened //
     if (!file_stream.is_open()) {
         // Format error message, display it, and exit with error code //
@@ -40,7 +42,6 @@ bool readBinFile(const filesys::path& arg_file, ShellcodeStruct& shell_struct) {
         }
         // Open the input file in binary mode pointed at the end of file //
         std::ifstream read_stream(arg_file, std::ios::binary | std::ios::ate);
-
         // If the file failed to open //
         if (!read_stream.is_open()) {
             // Raise catch handler with following string message //

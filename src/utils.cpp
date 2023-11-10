@@ -1,7 +1,7 @@
 // Included libraries //
-#include <algorithm>
 #include <iostream>
 // Header files //
+#include "hdrs/cleanup_manager.h"
 #include "hdrs/utils.h"
 
 
@@ -16,6 +16,7 @@ unsigned int closestMultiple(const unsigned int bytes_read, const unsigned int f
         std::string err_message = "Configured obfuscation factor " + std::to_string(factor) +
                                   " needs to be greater than 0";
         printErr(err_message);
+        std::exit(-5);
     }
     // Get the modulus of bytes read and factor //
     const unsigned int remainder = bytes_read % factor;
@@ -39,6 +40,19 @@ void filenameExtract(const char* path_arg, ShellcodeStruct& shell_struct) {
 }
 
 
+unsigned char* managedHeapAlloc(size_t buffer_size) {
+    /* Purpose -
+     * Parameters:
+     * Returns -
+     */
+    // Allocate unsigned char buffer based on passed in size //
+    auto* buffer = new unsigned char[buffer_size];
+    // Register buffer in atexit heap manager //
+    cleanupManager.registerBuffer(buffer);
+    return buffer;
+}
+
+
 void nopPaddingCopy(ShellcodeStruct& shell_struct, const unsigned int divisor_factor) {
     /* Purpose -
      * Parameters:
@@ -51,8 +65,9 @@ void nopPaddingCopy(ShellcodeStruct& shell_struct, const unsigned int divisor_fa
     // Calculate the number of NOP slides to pad at the end of shellcode //
     const unsigned int needed_nops = divisor - shell_struct.bytes_read;
 
+
     // Allocate heap memory for the padded shellcode //
-    auto* padded_shellcode = new unsigned char[shell_struct.bytes_read];
+    unsigned char* padded_shellcode = managedHeapAlloc(shell_struct.bytes_read + needed_nops + 1);
     // Copy the existing shellcode into the created padded buffer //
     memcpy(padded_shellcode, shell_struct.in_shellcode_ptr, shell_struct.bytes_read);
 
@@ -82,7 +97,7 @@ void regularCopy(ShellcodeStruct& shell_struct) {
      * Parameters:
      */
     // Allocate heap memory for obfuscated shellcode //
-    shell_struct.pad_shellcode_ptr = new unsigned char[shell_struct.bytes_read];
+    shell_struct.pad_shellcode_ptr = managedHeapAlloc(shell_struct.bytes_read);
     // Copy the input shellcode to obfuscated buffer for obfuscation process //
     memcpy(shell_struct.pad_shellcode_ptr, shell_struct.in_shellcode_ptr, shell_struct.bytes_read);
     // Save the bytes read as the result size //
