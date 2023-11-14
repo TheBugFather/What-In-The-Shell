@@ -65,7 +65,6 @@ void nopPaddingCopy(ShellcodeStruct& shell_struct, const unsigned int divisor_fa
     // Calculate the number of NOP slides to pad at the end of shellcode //
     const unsigned int needed_nops = divisor - shell_struct.bytes_read;
 
-
     // Allocate heap memory for the padded shellcode //
     unsigned char* padded_shellcode = managedHeapAlloc(shell_struct.bytes_read + needed_nops + 1);
     // Copy the existing shellcode into the created padded buffer //

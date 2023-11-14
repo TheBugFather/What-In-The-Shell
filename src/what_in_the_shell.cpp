@@ -79,7 +79,7 @@ void argParse(char* arg_array[], ShellcodeStruct& shellcode_struct) {
         || shellcode_struct.in_shellcode_ptr == nullptr) {
         // Print error and return error code //
         printErr("Either binary file read operation failed, no bytes were read, or there is no"
-                 "loaded shellcode in memory buffer.");
+                 " loaded shellcode in memory buffer.");
         std::exit(-2);
     }
     // Assign validated payload file path and obfuscation mode to ShellcodeStruct //
@@ -183,6 +183,8 @@ int main(int argc, char* argv[]) {
             printErr("Error occurred checking obfuscation mode, this logic should not happen");
             return -3;
     }
+    // Ensure the output file stream is closed //
+    closeFileStream(ShellStruct.output_stream);
     return 0;
 }
 

@@ -4,6 +4,9 @@
 #include "hdrs/cleanup_manager.h"
 
 
+CleanupManager cleanupManager;
+
+
 namespace {
     void cleanupRoutine() {
         /* Purpose - Atexit routine to free all the registered pointers to heap buffers.
@@ -16,14 +19,17 @@ namespace {
     }
 }
 
+
 // Constructor routine //
 CleanupManager::CleanupManager() {
     // Register heap buffer cleanup routine at program exit //
     atexit(cleanupRoutine);
 }
 
+
 // Deconstructor routine //
 CleanupManager::~CleanupManager() {}
+
 
 void CleanupManager::registerBuffer(unsigned char* buffer) {
     /* Purpose - Routine to register buffer in management vector.
@@ -32,6 +38,7 @@ void CleanupManager::registerBuffer(unsigned char* buffer) {
      */
     cleanup_list.push_back(buffer);
 }
+
 
 const std::vector<unsigned char*>& CleanupManager::getCleanupList() const {
     /* Purpose - Routine to access the pointers to buffers stored in buffer vector.

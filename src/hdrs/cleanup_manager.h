@@ -17,6 +17,6 @@ private:
     std::vector<unsigned char*> cleanup_list;
 };
 
-CleanupManager cleanupManager;
+extern CleanupManager cleanupManager;
 
 #endif

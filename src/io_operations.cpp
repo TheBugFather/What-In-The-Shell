@@ -8,6 +8,14 @@
 #include "hdrs/utils.h"
 
 
+void closeFileStream(std::ofstream& fileStream) {
+    /* Purpose -
+     * Parameters:
+     */
+    fileStream.close();
+}
+
+
 void openSourceFile(ShellcodeStruct& shell_struct) {
     /* Purpose -
      * Parameters:
@@ -81,7 +89,6 @@ bool readBinFile(const filesys::path& arg_file, ShellcodeStruct& shell_struct) {
 void writeOutputData(ShellcodeStruct& shell_struct, const char* data) {
     /* Purpose -
      * Parameters:
-     * Returns -
      */
     // Attempt to write data to output file stream //
     shell_struct.output_stream.write(data, static_cast<std::streamsize>(strlen(data)));

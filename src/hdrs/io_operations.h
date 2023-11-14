@@ -10,6 +10,7 @@ struct ShellcodeStruct;
 // Define namespace aliases //
 namespace filesys = std::filesystem;
 // Function prototypes //
+void closeFileStream(std::ofstream& fileStream);
 void openSourceFile(ShellcodeStruct& shell_struct);
 bool readBinFile(const filesys::path& arg_file, ShellcodeStruct& shell_struct);
 void writeOutputData(ShellcodeStruct& shell_struct, const char* data);
