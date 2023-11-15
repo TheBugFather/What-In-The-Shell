@@ -20,12 +20,8 @@ unsigned int closestMultiple(const unsigned int bytes_read, const unsigned int f
     }
     // Get the modulus of bytes read and factor //
     const unsigned int remainder = bytes_read % factor;
-    // If the remainder is 0, bytes read is already a factor //
-    if (remainder == 0) {
-        return bytes_read;
-    }
-    // Round up to the nearest multiple by adding the difference to bytes read //
-    return bytes_read + factor - remainder;
+    // Return bytes read if remainder is 0, otherwise round up bytes read to the nearest factor //
+    return (remainder == 0) ? bytes_read : bytes_read + factor - remainder;
 }
 
 
