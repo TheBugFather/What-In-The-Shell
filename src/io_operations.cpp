@@ -8,11 +8,15 @@
 #include "hdrs/utils.h"
 
 
-void closeFileStream(std::ofstream& fileStream) {
-    /* Purpose -
+bool closeFileStream(std::ofstream& file_stream) {
+    /* Purpose - Attempts to close the file stream passed in by reference.
      * Parameters:
+     *      @ file_stream - The file stream to close.
+     *
+     * Returns - true/false on success/failure.
      */
-    fileStream.close();
+    file_stream.close();
+    return file_stream.good();
 }
 
 
@@ -60,21 +64,21 @@ bool readBinFile(const filesys::path& arg_file, ShellcodeStruct& shell_struct) {
         const std::streampos file_size = read_stream.tellg();
         // Set the file pointer back to start of file to read data //
         read_stream.seekg(0, std::ios::beg);
+
         // Create vector to store read file data //
-        std::vector<unsigned char> read_bytes(file_size);
+        std::vector<unsigned char> read_bytes;
+        // Resize vector to conversion size //
+        read_bytes.resize(static_cast<std::size_t>(file_size));
 
         // If bytes are successfully read into vector as unsigned char type //
-        if (read_stream.read(reinterpret_cast<char*>(read_bytes.data()), file_size)) {
-            // Set the number of bytes read //
-            shell_struct.bytes_read = file_size;
-            // Set the reference to read file data //
-            shell_struct.in_shellcode_ptr = read_bytes.data();
-        }
-        // If bytes fail to be read into vector //
-        else {
+        if (!read_stream.read(reinterpret_cast<char*>(read_bytes.data()), file_size)) {
             // Raise catch handler with following string message //
             throw std::ios_base::failure("Unable to read data from the input file.");
         }
+        // Set the number of bytes read //
+        shell_struct.bytes_read = file_size;
+        // Set the reference to read file data //
+        shell_struct.in_shellcode_ptr = read_bytes.data();
     }
     // If an error occurs during file operation //
     catch (const std::ios_base::failure& file_err) {
@@ -91,7 +95,7 @@ void writeOutputData(ShellcodeStruct& shell_struct, const char* data) {
      * Parameters:
      */
     // Attempt to write data to output file stream //
-    shell_struct.output_stream.write(data, static_cast<std::streamsize>(strlen(data)));
+    shell_struct.output_stream << data;
     // If the write operation was not successful //
     if (!shell_struct.output_stream) {
         // Format error message and display it //

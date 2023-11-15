@@ -183,8 +183,21 @@ int main(int argc, char* argv[]) {
             printErr("Error occurred checking obfuscation mode, this logic should not happen");
             return -3;
     }
-    // Ensure the output file stream is closed //
-    closeFileStream(ShellStruct.output_stream);
+
+    bool is_closed;
+
+    // If the file stream fails to close, try again //
+    if (!closeFileStream(ShellStruct.output_stream)) {
+        is_closed = closeFileStream(ShellStruct.output_stream);
+    }
+    else {
+        is_closed = true;
+    }
+    // If the file stream failed to close after multiple attempts //
+    if (!is_closed) {
+        printErr("File stream failed multiple close attempts");
+        return -7;
+    }
     return 0;
 }
 
