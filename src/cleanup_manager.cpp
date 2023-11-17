@@ -28,7 +28,7 @@ CleanupManager::CleanupManager() {
 
 
 // Deconstructor routine //
-CleanupManager::~CleanupManager() {}
+CleanupManager::~CleanupManager() = default;
 
 
 void CleanupManager::registerBuffer(unsigned char* buffer) {

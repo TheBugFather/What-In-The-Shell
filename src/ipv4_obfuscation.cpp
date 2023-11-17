@@ -36,7 +36,9 @@ uint32_t ipv4HexGen(int byte_1, int byte_2, int byte_3, int byte_4) {
 
 
 void ipv4ObfuscationHandler(ShellcodeStruct& shell_struct) {
-    /* Purpose - Takes the shellcode stored in passed in struct and
+    /* Purpose - Takes the shellcode stored in passed in struct and runs it through obfuscation
+     *           routine to obfuscate it as an array of IPv4 address. Source code file is generated
+     *           with obfuscated array and corresponding decoder routine.
      * Parameters:
      *      @ shell_struct - The shellcode struct where the shellcode to be obfuscated resides.
      */
@@ -47,7 +49,7 @@ void ipv4ObfuscationHandler(ShellcodeStruct& shell_struct) {
                                "#ifndef NT_SUCCESS\n"
                                "#define NT_SUCCESS(Status) (((NTSTATUS)(Status)) >= 0)\n"
                                "#endif\n";
-    // Write the header file //
+    // Write the header of the file //
     writeOutputData(shell_struct, file_header);
 
     const char payload_bracket_inner[] = "\nconst char * IPv4Shell [] = { \n\t";
@@ -69,7 +71,7 @@ void ipv4ObfuscationHandler(ShellcodeStruct& shell_struct) {
         // Generate the readable string version from hex representation //
         ipv4Gen(hex_ip_addr, formatted_ip, sizeof(formatted_ip));
 
-        // Format generated IPv4 address as comma separated //
+        // Format generated IPv4 address with comma to be inserted into array //
         snprintf(format_comma, sizeof(format_comma), "\"%s\",", formatted_ip);
         // Write the formatted comma-separated IP address member //
         writeOutputData(shell_struct, format_comma);
