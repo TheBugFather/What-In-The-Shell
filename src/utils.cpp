@@ -6,9 +6,14 @@
 
 
 unsigned int closestMultiple(const unsigned int bytes_read, const unsigned int factor) {
-    /* Purpose -
+    /* Purpose - Ensures the bytes read is a multiple or divisible by the passed in factor. If not
+     *           the offset is calculated to ensure the shellcode is divisible of its obfuscation
+     *           method.
      * Parameters:
-     * Returns -
+     *      @ bytes_read - The length of the original shellcode read from the source file.
+     *      @ factor - The divisibility factor associated with the obfuscation mode.
+     *
+     * Returns - Returns either the bytes read if a multiple or bytes read plus calculated offset.
      */
     // If the factor is 0, exit with original number of bytes //
     if (factor <= 0) {
@@ -37,9 +42,11 @@ void filenameExtract(const char* path_arg, ShellcodeStruct& shell_struct) {
 
 
 unsigned char* managedHeapAlloc(size_t buffer_size) {
-    /* Purpose -
+    /* Purpose - Registers heap buffer with cleanup manager automated heap management system.
      * Parameters:
-     * Returns -
+     *      @ buffer_size - The size of the malloc buffer to be allocated and stored.
+     *
+     * Returns - Pointer to the allocated heap buffer.
      */
     // Allocate unsigned char buffer based on passed in size //
     auto* buffer = new unsigned char[buffer_size];
@@ -50,8 +57,11 @@ unsigned char* managedHeapAlloc(size_t buffer_size) {
 
 
 void nopPaddingCopy(ShellcodeStruct& shell_struct, const unsigned int divisor_factor) {
-    /* Purpose -
+    /* Purpose - Allocated heap buffer based on the shellcode read from the source file with added
+     *           NOP slides based on calculated needs based on divisibility of obfuscation mode.
      * Parameters:
+     *      @ shell_struct - The shellcode struct where the buffer pointers reside.
+     *      @ divisor_factor - The divisibility factor based on the obfuscation mode.
      */
     const unsigned char nop_slide = 0x90;
     unsigned int index = 0;
@@ -88,8 +98,10 @@ void printErr(const std::string& err_message) {
 
 
 void regularCopy(ShellcodeStruct& shell_struct) {
-    /* Purpose -
+    /* Purpose - Allocated heap buffer based on the shellcode read from the source file with no need
+     *           for additional NOP slide padding.
      * Parameters:
+     *      @ shell_struct - The shellcode struct where the malloc buffer pointer is stored.
      */
     // Allocate heap memory for obfuscated shellcode //
     shell_struct.pad_shellcode_ptr = managedHeapAlloc(shell_struct.bytes_read);

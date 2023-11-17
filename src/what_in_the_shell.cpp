@@ -7,7 +7,7 @@
 #include "hdrs/mac_obfuscation.h"
 #include "hdrs/utils.h"
 #include "hdrs/what_in_the_shell.h"
-// Local Macros //
+// Local constants //
 #define LINE_COUNT 90
 #define MAX_ARGS 3
 
@@ -17,8 +17,15 @@ int usageDisplay(const filesys::path* program_name, const int exit_code);
 
 
 void shellCopyHandler(ShellcodeStruct& shell_struct, const unsigned int divisibility) {
-    /* Purpose -
+    /* Purpose - Set the output file based on obfuscation mode, takes the read shellcode and copies
+     *           it to the buffer for obfuscation routines with padding NOP slides if needed. Before
+     *           exiting, it opens the file stream for the output data to be written which is stored
+     *           in the shellcode struct.
      * Parameters:
+     *      @ shell_struct - The shellcode struct that stores numerous components associated with
+     *                       this routine.
+     *      @ divisibility - The factor that the shellcode should be divisible by associated with
+     *                       the translation method of the encoding system.
      */
     std::string obfuscator;
 
@@ -61,8 +68,11 @@ void shellCopyHandler(ShellcodeStruct& shell_struct, const unsigned int divisibi
 
 
 void argParse(char* arg_array[], ShellcodeStruct& shellcode_struct) {
-    /* Purpose -
+    /* Purpose - Parses the programs args, validates them, and stores the result in the shellcode
+     *           struct for later reference.
      * Parameters:
+     *      @ arg_array - The array of arguments passed into the program.
+     *      @ shellcode_struct - The shellcode struct to stored validated args.
      */
     // Validate the payload file arg //
     const filesys::path payload_file = validatePayloadFile(arg_array[1]);
@@ -96,7 +106,7 @@ int usageDisplay(const filesys::path* program_name, const int exit_code) {
      *
      * Returns - Erroneous exit code.
      */
-    // Initialize border line variables //
+    // Initialize borderline variables //
     const char equals = '=';
     const char plus = '+';
     // Format border line //
@@ -134,8 +144,14 @@ void bannerDisplay() {
 
 
 int main(int argc, char* argv[]) {
-    /* Purpose -
+    /* Purpose - Displays program banner, validates args storing the result in shellcode struct.
+     *           After arg validation, a buffer for the obfuscated shellcode is allocated with any
+     *           needed NOP slide padding and the output file stream is opened. Finally, the
+     *           obfuscation routine is called which writes the generated source code with the
+     *           obfuscated shellcode to the output file.
      * Parameters:
+     *      @ argc - The number of args passed into the program.
+     *      @ argv - A pointer to the array of args passed into the program.
      */
     // Display the program banner //
     bannerDisplay();

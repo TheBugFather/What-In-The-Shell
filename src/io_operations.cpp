@@ -1,5 +1,4 @@
 // Included libraries //
-#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -21,8 +20,10 @@ bool closeFileStream(std::ofstream& file_stream) {
 
 
 void openSourceFile(ShellcodeStruct& shell_struct) {
-    /* Purpose -
+    /* Purpose - Opens the output file stored in the shellcode struct and saves the open file stream
+     *           in the shellcode struct.
      * Parameters:
+     *      @ shell_struct - The shellcode struct where output file and result file stream reside.
      */
     // Open the file in binary mode for reading and writing //
     std::ofstream file_stream(shell_struct.output_file);
@@ -91,8 +92,11 @@ bool readBinFile(const filesys::path& arg_file, ShellcodeStruct& shell_struct) {
 
 
 void writeOutputData(ShellcodeStruct& shell_struct, const char* data) {
-    /* Purpose -
+    /* Purpose - Takes the passed in pointer to data buffer to be written to output file stream
+     *           stored in passed in shellcode struct.
      * Parameters:
+     *      @ shell_struct - The shellcode struct where the output file stream handler resides.
+     *      @ data - The pointer the data buffer to be written to the file stream.
      */
     // Attempt to write data to output file stream //
     shell_struct.output_stream << data;
