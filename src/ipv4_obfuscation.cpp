@@ -83,7 +83,7 @@ void ipv4ObfuscationHandler(ShellcodeStruct& shell_struct) {
     // Move the file stream pointer back one index to overwrite the last comma //
     shell_struct.output_stream.seekp(-1, std::ios_base::end);
 
-    const char payload_bracket_outer[] = "\n};\n";
+    const char payload_bracket_outer[] = "\n};\n\n";
     // Write the outer bracket of the obfuscated payload //
     writeOutputData(shell_struct, payload_bracket_outer);
 
