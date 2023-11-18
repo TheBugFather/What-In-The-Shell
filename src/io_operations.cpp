@@ -102,9 +102,10 @@ void writeOutputData(ShellcodeStruct& shell_struct, const char* data) {
     shell_struct.output_stream << data;
     // If the write operation was not successful //
     if (!shell_struct.output_stream) {
-        // Format error message and display it //
+        // Format error message, display it, and exit //
         std::string err_message = "Error occurred writing " + std::to_string(*data) +
                                   " to output file " + shell_struct.output_file.string();
         printErr(err_message);
+        std::exit(-7);
     }
 }

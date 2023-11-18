@@ -39,7 +39,7 @@ def main():
                     # Replace any tabs in the line with spaces #
                     buffer = buffer.replace('\t', '    ')
 
-                # Preserve the newlines from origial line #
+                # Preserve the newlines from original line #
                 buffer = repr(f'\"{buffer}\"')
                 # Remove extra single quotes from prior line #
                 buffer = buffer.replace('\'', '')

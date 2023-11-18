@@ -3,7 +3,7 @@
 #define IPV6_ITER 16
 
 
-void ipv6Gen(uint32_t ip_1, uint32_t ip_2, uint32_t ip_3, uint32_t ip_4, char* output_bufer,
+void ipv6Gen(uint32_t ip_1, uint32_t ip_2, uint32_t ip_3, uint32_t ip_4, char* output_buffer,
              size_t buffer_size) {
     /* Purpose - Converts the passed in hex representation to a char IPv6 address.
      * Parameters:
@@ -17,33 +17,33 @@ void ipv6Gen(uint32_t ip_1, uint32_t ip_2, uint32_t ip_3, uint32_t ip_4, char* o
     char ip_parse_1[32], ip_parse_2[32], ip_parse_3[32], ip_parse_4[32];
 
     // Format the 4 sets of 2 octets //
-    std::snprintf(ip_parse_1, sizeof(ip_parse_1), "%0.2X%0.2X:%0.2X%0.2X",
+    std::snprintf(ip_parse_1, sizeof(ip_parse_1), "%02X%02X:%02X%02X",
                   (ip_1 >> 24) & 0xFF,
                   (ip_1 >> 16) & 0xFF,
                   (ip_1 >> 8) & 0xFF,
                   ip_1 & 0xFF);
 
-    std::snprintf(ip_parse_2, sizeof(ip_parse_2), "%0.2X%0.2X:%0.2X%0.2X",
+    std::snprintf(ip_parse_2, sizeof(ip_parse_2), "%02X%02X:%02X%02X",
                   (ip_2 >> 24) & 0xFF,
                   (ip_2 >> 16) & 0xFF,
                   (ip_2 >> 8) & 0xFF,
                   ip_2 & 0xFF);
 
-    std::snprintf(ip_parse_3, sizeof(ip_parse_3), "%0.2X%0.2X:%0.2X%0.2X",
+    std::snprintf(ip_parse_3, sizeof(ip_parse_3), "%02X%02X:%02X%02X",
                   (ip_3 >> 24) & 0xFF,
                   (ip_3 >> 16) & 0xFF,
                   (ip_3 >> 8) & 0xFF,
                   ip_3 & 0xFF);
 
-    std::snprintf(ip_parse_4, sizeof(ip_parse_4), "%0.2X%0.2X:%0.2X%0.2X",
+    std::snprintf(ip_parse_4, sizeof(ip_parse_4), "%02X%02X:%02X%02X",
                   (ip_4 >> 24) & 0xFF,
                   (ip_4 >> 16) & 0xFF,
                   (ip_4 >> 8) & 0xFF,
                   ip_4 & 0xFF);
 
     // Format the 4 octet sets as resulting IPv6 address //
-    snprintf(output_bufer, buffer_size, "%s:%s:%s:%s",
-             ip_parse_1, ip_parse_2, ip_parse_3, ip_parse_4);
+    std::snprintf(output_buffer, buffer_size, "%s:%s:%s:%s",
+                  ip_parse_1, ip_parse_2, ip_parse_3, ip_parse_4);
 }
 
 
@@ -89,7 +89,7 @@ void ipv6ObfuscationHandler(ShellcodeStruct& shell_struct) {
     char format_comma[128];
 
     // Iterate over the shellcode by increments of 16 //
-    for (int iter = 0; iter <= shell_struct.result_size; iter += IPV6_ITER) {
+    for (unsigned int iter = 0; iter <= shell_struct.result_size; iter += IPV6_ITER) {
         // For each 16 bytes, generate 4 ip values of 4 bytes each. Resulting values are passed into
         // a function that generates 4 sets of two octets and puts the IPv6 address together //
         ipv6Gen(ipv6HexGen(shell_struct.pad_shellcode_ptr[iter],
@@ -132,8 +132,8 @@ void ipv6ObfuscationHandler(ShellcodeStruct& shell_struct) {
                                       "#define SizeOfShellcode %d\n\n";
     char shellcode_constants[sizeof(shellcode_preparse) + 10];
     // Parse the formatted string in result buffer //
-    snprintf(shellcode_constants, sizeof(shellcode_constants), shellcode_preparse,
-             num_elements, shell_struct.result_size);
+    std::snprintf(shellcode_constants, sizeof(shellcode_constants), shellcode_preparse,
+                  num_elements, shell_struct.result_size);
     // Write the formatted constants //
     writeOutputData(shell_struct, shellcode_constants);
 

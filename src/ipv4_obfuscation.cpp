@@ -12,11 +12,11 @@ void ipv4Gen(uint32_t hex_ip_addr, char* output_buffer, size_t buffer_size) {
      *      @ output_buffer - A pointer to the char buffer where the formatted result will reside.
      *      @ buffer_size - The size of the output buffer where the formatted output will be stored.
      */
-    snprintf(output_buffer, buffer_size, "%d.%d.%d.%d",
-             (hex_ip_addr >> 24) & 0xFF,
-             (hex_ip_addr >> 16) & 0xFF,
-             (hex_ip_addr >> 8) & 0xFF,
-             hex_ip_addr & 0xFF);
+    std::snprintf(output_buffer, buffer_size, "%d.%d.%d.%d",
+                 (hex_ip_addr >> 24) & 0xFF,
+                 (hex_ip_addr >> 16) & 0xFF,
+                 (hex_ip_addr >> 8) & 0xFF,
+                 hex_ip_addr & 0xFF);
 }
 
 
@@ -62,7 +62,7 @@ void ipv4ObfuscationHandler(ShellcodeStruct& shell_struct) {
     uint32_t hex_ip_addr;
 
     // Iterate over the shellcode by increments of 4 //
-    for (int iter = 0; iter <= shell_struct.result_size; iter += IPV4_ITER) {
+    for (unsigned int iter = 0; iter <= shell_struct.result_size; iter += IPV4_ITER) {
         // Generate the hex representation of the next 4 bytes of data //
         hex_ip_addr = ipv4HexGen(shell_struct.pad_shellcode_ptr[iter],
                                  shell_struct.pad_shellcode_ptr[iter + 1],
@@ -72,7 +72,7 @@ void ipv4ObfuscationHandler(ShellcodeStruct& shell_struct) {
         ipv4Gen(hex_ip_addr, formatted_ip, sizeof(formatted_ip));
 
         // Format generated IPv4 address with comma to be inserted into array //
-        snprintf(format_comma, sizeof(format_comma), "\"%s\",", formatted_ip);
+        std::snprintf(format_comma, sizeof(format_comma), "\"%s\",", formatted_ip);
         // Write the formatted comma-separated IP address member //
         writeOutputData(shell_struct, format_comma);
 
@@ -93,8 +93,8 @@ void ipv4ObfuscationHandler(ShellcodeStruct& shell_struct) {
                                       "#define SizeOfShellcode %d\n\n";
     char shellcode_constants[sizeof(shellcode_preparse) + 10];
     // Parse the formatted string in result buffer //
-    snprintf(shellcode_constants, sizeof(shellcode_constants), shellcode_preparse,
-             num_elements, shell_struct.result_size);
+    std::snprintf(shellcode_constants, sizeof(shellcode_constants), shellcode_preparse,
+                  num_elements, shell_struct.result_size);
     // Write the formatted constants //
     writeOutputData(shell_struct, shellcode_constants);
 

@@ -66,7 +66,7 @@ void macObfuscationHandler(ShellcodeStruct& shell_struct) {
     uint64_t hex_value;
 
     // Iterate over the shellcode by increments of 6 //
-    for (int iter = 0; iter <= shell_struct.result_size; iter += MAC_ITER) {
+    for (unsigned int iter = 0; iter <= shell_struct.result_size; iter += MAC_ITER) {
         // Generate hex representation of the next 6 bytes of data //
         hex_value = macHexGen(shell_struct.pad_shellcode_ptr[iter],
                               shell_struct.pad_shellcode_ptr[iter + 1],
@@ -99,8 +99,8 @@ void macObfuscationHandler(ShellcodeStruct& shell_struct) {
                                       "#define SizeOfShellcode %d\n\n";
     char shellcode_constants[sizeof(shellcode_preparse) + 10];
     // Parse the formatted string in result buffer //
-    snprintf(shellcode_constants, sizeof(shellcode_constants), shellcode_preparse,
-             num_elements, shell_struct.result_size);
+    std::snprintf(shellcode_constants, sizeof(shellcode_constants), shellcode_preparse,
+                  num_elements, shell_struct.result_size);
     // Write the formatted constants //
     writeOutputData(shell_struct, shellcode_constants);
 
