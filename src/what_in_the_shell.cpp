@@ -13,7 +13,7 @@
 
 
 // Function prototypes //
-int usageDisplay(const filesys::path* program_name, const int exit_code);
+int usageDisplay(const int exit_code);
 
 
 void shellCopyHandler(ShellcodeStruct& shell_struct, const unsigned int divisibility) {
@@ -31,6 +31,10 @@ void shellCopyHandler(ShellcodeStruct& shell_struct, const unsigned int divisibi
 
     // Execute logic based on selected obfuscation mode //
     switch (shell_struct.obfuscation_mode) {
+        case MODE_MAC:
+            obfuscator = "MAC address";
+            shell_struct.output_file = "mac_src_out.cpp";
+            break;
         case MODE_IPV4:
             obfuscator = "IPv4 address";
             shell_struct.output_file = "ipv4_src_out.cpp";
@@ -38,10 +42,6 @@ void shellCopyHandler(ShellcodeStruct& shell_struct, const unsigned int divisibi
         case MODE_IPV6:
             obfuscator = "IPv6 address";
             shell_struct.output_file = "ipv6_src_out.cpp";
-            break;
-        case MODE_MAC:
-            obfuscator = "MAC address";
-            shell_struct.output_file = "mac_src_out.cpp";
             break;
         default:
             // Print error and return error code //
@@ -51,7 +51,7 @@ void shellCopyHandler(ShellcodeStruct& shell_struct, const unsigned int divisibi
 
     // If shellcode is not divisible by 6 (needs NOP padding) //
     if (!shell_struct.bytes_read % divisibility == 0) {
-        std::cout << "[+] The shellcode is not divisible by " << divisibility << " based on"
+        std::cout << "[+] The shellcode is not divisible by " << divisibility << " based on "
                      "passed in " << obfuscator << " .. padding NOP slides" << std::endl;
         // Allocate shellcode malloc buffer with appended NOP slide padding //
         nopPaddingCopy(shell_struct, divisibility);
@@ -82,7 +82,7 @@ void argParse(char* arg_array[], ShellcodeStruct& shellcode_struct) {
     // If either parameter validation functions failed //
     if (payload_file.empty() || (obfuscation_mode < MIN_MODE || obfuscation_mode > MAX_MODE)) {
         // Display program usage & exit with error code //
-        usageDisplay(&shellcode_struct.file_name, -2);
+        usageDisplay(-2);
     }
     // If the data fails to be read from the binary into shellcode struct //
     if (!readBinFile(payload_file, shellcode_struct) || shellcode_struct.bytes_read == 0
@@ -98,7 +98,7 @@ void argParse(char* arg_array[], ShellcodeStruct& shellcode_struct) {
 }
 
 
-int usageDisplay(const filesys::path* program_name, const int exit_code) {
+int usageDisplay(const int exit_code) {
     /* Purpose - Displays the program usage due to improper args provided upon initial execution.
      * Parameters:
      *      @ program_name - The name of the binary currently being executed.
@@ -115,11 +115,11 @@ int usageDisplay(const filesys::path* program_name, const int exit_code) {
 
     // Print usage with borders //
     std::cout << full_line << "\n"
-              << "\t\t[!] Usage: " << *program_name << " <payload_file> <obfuscation_mode>" << "\n"
+              << "\t\t[!] Usage: WhatInTheShell.exe <payload_file> <obfuscation_mode>" << "\n"
               << "\t\t[+] Payload obfuscation modes:\n"
-              << "\t\t\t[1] IPv4 address => 192.168.4.37\n"
-              << "\t\t\t[2] IPv6 address => 0C4F:E834:0000:000C:4151:0000:4150:5251\n"
-              << "\t\t\t[3] MAC address  => BF-35-CE-3F-5A-6C\n"
+              << "\t\t\t[1] MAC address  => BF-35-CE-3F-5A-6C\n"
+              << "\t\t\t[2] IPv4 address => 192.168.4.37\n"
+              << "\t\t\t[3] IPv6 address => 0C4F:E834:0000:000C:4151:0000:4150:5251\n"
               << full_line << std::endl;
     // Exit with passed in exit code //
     std::exit(exit_code);
@@ -158,24 +158,27 @@ int main(int argc, char* argv[]) {
     // Initialize the shellcode struct populated with NULL/empty types //
     struct ShellcodeStruct ShellStruct = {filesys::path(), filesys::path(), 0, 0, nullptr,
                                           nullptr, 0, filesys::path(), nullptr};
-    // Get the name from the path arg as string //
-    filenameExtract(argv[0], ShellStruct);
-
     // If an improper number of args were passed in //
     if (argc != MAX_ARGS) {
-        // Print an error notifying that the shellcode arg was missing //
-        printErr("Missing input parameter .. check usage and try again");
         // Display program usage & exit with error code //
-        usageDisplay(&ShellStruct.file_name, -1);
+        usageDisplay(-1);
     }
+    // Get the name from the path arg as string //
+    filenameExtract(argv[1], ShellStruct);
     // Validate parse the appropriate args into the shellcode struct //
     argParse(argv, ShellStruct);
 
-    std::cout << "[+] The size of the shellcode read from " << ShellStruct.file_name
+    std::cout << "\n[+] The size of the shellcode read from " << ShellStruct.file_name
               << ": " << ShellStruct.bytes_read << std::endl;
 
     // Execute logic based on selected obfuscation mode //
     switch (ShellStruct.obfuscation_mode) {
+        case MODE_MAC:
+            // Copy the read shellcode into malloc buffer, appending NOP slides if needed //
+            shellCopyHandler(ShellStruct, 6);
+            // Call the MAC based shellcode obfuscation handler //
+            macObfuscationHandler(ShellStruct);
+            break;
         case MODE_IPV4:
             // Copy the read shellcode into malloc buffer, appending NOP slides if needed //
             shellCopyHandler(ShellStruct, 4);
@@ -187,12 +190,6 @@ int main(int argc, char* argv[]) {
             shellCopyHandler(ShellStruct, 16);
             // Call the IPv6 based shellcode obfuscation handler //
             ipv6ObfuscationHandler(ShellStruct);
-            break;
-        case MODE_MAC:
-            // Copy the read shellcode into malloc buffer, appending NOP slides if needed //
-            shellCopyHandler(ShellStruct, 6);
-            // Call the MAC based shellcode obfuscation handler //
-            macObfuscationHandler(ShellStruct);
             break;
         default:
             // Print error and return error code //

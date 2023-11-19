@@ -56,7 +56,7 @@ void macObfuscationHandler(ShellcodeStruct& shell_struct) {
     // Write the header of the file //
     writeOutputData(shell_struct, file_header);
 
-    const char payload_bracket_inner[] = "\nconst char* MACShell[] = {\n";
+    const char payload_bracket_inner[] = "\nconst char* MACShell[] = {\n\t";
     // Write the inner bracket of the obfuscated payload //
     writeOutputData(shell_struct, payload_bracket_inner);
 

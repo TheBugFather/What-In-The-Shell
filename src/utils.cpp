@@ -37,7 +37,7 @@ void filenameExtract(const char* path_arg, ShellcodeStruct& shell_struct) {
      *      @ shell_struct - Reference to the shellcode struct for data storage.
      */
     std::string exe_path = path_arg;
-    shell_struct.file_path = exe_path.substr(exe_path.find_last_of("/\\") + 1);
+    shell_struct.file_name = exe_path.substr(exe_path.find_last_of("/\\") + 1);
 }
 
 
